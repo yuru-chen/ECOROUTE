@@ -1,4 +1,3 @@
-
 import streamlit as st
 st.set_page_config(page_title="EcoRoute AI", page_icon="🌍")
 
@@ -6,15 +5,16 @@ import folium
 from streamlit_folium import st_folium
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib import font_manager
+from matplotlib import font_manager, rcParams
 import random
 import cv2
 import numpy as np
 
-# ✅ 全域字型設定（macOS 專用）
-#zh_font_path = "/System/Library/Fonts/STHeiti Medium.ttc"
-#zh_font = font_manager.FontProperties(fname=zh_font_path)
-#plt.rcParams['axes.unicode_minus'] = False
+# ✅ 改為安全部署用字型設定（DejaVu Sans 為內建，保證存在）
+rcParams['font.family'] = font_manager.FontProperties(
+    fname=font_manager.findfont("DejaVu Sans")
+).get_name()
+rcParams['axes.unicode_minus'] = False
 
 # ✅ 自訂樣式美化
 st.markdown(
@@ -46,7 +46,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 🏁 Streamlit 基本設定
 st.title("🌍 EcoRoute：AI永續路線小幫手")
 st.subheader("讓你每天少走冤枉路，也少排二氧化碳")
 st.caption("輸入起點與目的地，系統將根據天氣與交通影像自動推薦最佳通勤選項")
@@ -108,31 +107,8 @@ st.subheader("📋 通勤方案比較表（含碳足跡分析）")
 st.markdown("以下為根據距離與國際碳排係數計算的通勤方式分析：")
 st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"]], use_container_width=True)
 
-# 📊 圖表（支援中文與 CO₂，同步對齊）
-#st.subheader("📊 時間與碳排比較圖")
-#labels = df["交通方式"].tolist()
-#carbon_values = df["碳排量（kg CO₂）"].tolist()
-#time_values = df["時間（分鐘）"].tolist()
-#x = np.arange(len(labels))
-
-#fig, ax1 = plt.subplots()
-#ax2 = ax1.twinx()
-#ax1.bar(x, time_values, color='skyblue', width=0.4)
-#ax2.plot(x, carbon_values, 'ro-', linewidth=2, markersize=8)
-
-#ax1.set_xticks(x)
-#ax1.set_xticklabels(labels, fontproperties=zh_font)
-#ax1.set_ylabel("通勤時間（分鐘）", fontproperties=zh_font)
-#ax2.set_ylabel("碳排量（kg CO₂）", fontproperties=zh_font)
-
-#st.pyplot(fig)
-# 📊 圖表（支援中文與 CO₂，同步對齊）
+# 📊 圖表（支援部署字型）
 st.subheader("📊 時間與碳排比較圖")
-
-import matplotlib
-matplotlib.rcParams['font.family'] = 'DejaVu Sans'
-matplotlib.rcParams['axes.unicode_minus'] = False
-
 labels = df["交通方式"].tolist()
 carbon_values = df["碳排量（kg CO₂）"].tolist()
 time_values = df["時間（分鐘）"].tolist()
@@ -204,7 +180,6 @@ if car_flow is not None:
     tree_equivalent = round(total_carbon / 0.016, 1)
     st.info(f"🌳 選擇 {target} 預估碳排為 **{total_carbon} kg CO₂**，約需 **{tree_equivalent} 棵樹** 一年吸收")
 
-    # 🌱 綠色語錄
     green_quotes_by_context = {
         ("晴天", "捷運"): ["🚇 捨棄油門，搭上捷運，那些微小選擇也能成為光。"],
         ("晴天", "公車"): ["🚌 有些快不是真的快，有些慢才是真的到達。"],
@@ -236,7 +211,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ✅ 按鈕下方置中：用 columns 來對齊
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.page_link("pages/quiz.py", label="➠➠➠前往測驗", use_container_width=True)
