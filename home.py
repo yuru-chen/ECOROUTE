@@ -129,8 +129,9 @@ st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "�
 # 📊 圖表（支援中文與 CO₂，同步對齊）
 st.subheader("📊 時間與碳排比較圖")
 
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['axes.unicode_minus'] = False
+import matplotlib
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+matplotlib.rcParams['axes.unicode_minus'] = False
 
 labels = df["交通方式"].tolist()
 carbon_values = df["碳排量（kg CO₂）"].tolist()
@@ -143,7 +144,7 @@ ax1.bar(x, time_values, color='skyblue', width=0.4)
 ax2.plot(x, carbon_values, 'ro-', linewidth=2, markersize=8)
 
 ax1.set_xticks(x)
-ax1.set_xticklabels(labels)  # ✅ 不再用 zh_font
+ax1.set_xticklabels(labels)
 ax1.set_ylabel("通勤時間（分鐘）")
 ax2.set_ylabel("碳排量（kg CO₂）")
 
