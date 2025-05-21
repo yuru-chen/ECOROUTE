@@ -138,6 +138,9 @@ folium.Marker([25.0478, 121.5170], popup="台北車站", icon=folium.Icon(color=
 folium.Marker([25.0130, 121.5414], popup="臺灣科技大學", icon=folium.Icon(color='green')).add_to(m)
 st_folium(m, width=700, height=450)
 
+# ✅ 插入縮減空白的間距控制
+st.markdown("<div style='margin-top: -30px;'></div>", unsafe_allow_html=True)
+
 # 車流分析
 if "car_count" not in st.session_state:
     st.session_state["car_count"] = None
