@@ -202,6 +202,29 @@ if car_flow is not None:
     if quotes:
         st.subheader("🌱 今日綠色生活提醒")
         st.markdown(random.choice(quotes))
+# 👉 今日幸運綠色植物展示
+st.subheader("🪴 今日幸運綠色植物")
+
+plant_image_map = {
+    "晴天": "image/Monstera.png",
+    "雨天": "image/Calathea.png",
+    "陰天": "image/Pothos.png"
+}
+
+plant_language_map = {
+    "晴天": "🌿 龜背芋的語言：**堅毅、獨立、自信成長**",
+    "雨天": "🌧️ 竹芋的語言：**療癒、安撫、包容溫柔的心**",
+    "陰天": "☁️ 黃金葛的語言：**堅韌、順應環境、不畏逆境**"
+}
+
+plant_image_path = plant_image_map.get(weather)
+if plant_image_path:
+    st.image(plant_image_path, caption=f"{weather}日的綠色植物祝福 🌿", use_column_width=True)
+    plant_message = plant_language_map.get(weather)
+    if plant_message:
+        st.markdown(f"<div style='text-align:center; font-size:18px; color:#2e7d32; margin-top:10px;'>{plant_message}</div>", unsafe_allow_html=True)
+else:
+    st.info("🌱 今天的綠色植物資料尚未準備完成")
 
 # 測驗連結卡片
 st.markdown("""
