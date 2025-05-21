@@ -191,14 +191,6 @@ if car_flow is not None:
 
     st.write("目前選擇的天氣是：", weather)
     st.subheader("🪴 今日幸運綠色植物")
-
-    if os.path.exists("image"):
-        st.info("📁 image 資料夾內容如下：")
-        st.write(os.listdir("image"))
-    else:
-        st.error("❌ 找不到 image 資料夾，請確認已正確 push 至 GitHub 並與 home.py 同層")
-
-    # 🌿 將這段使用於今日綠色植物區域
     plant_image_map = {
         "晴天": "image/Monstera.png",
         "雨天": "image/Calathea.png",
@@ -211,7 +203,9 @@ if car_flow is not None:
     }
     plant_image_path = plant_image_map.get(weather)
     if plant_image_path and os.path.exists(plant_image_path):
-        st.image(plant_image_path, caption=f"{weather}日的綠色植物祝福 🌿", use_container_width=True)
+        img = cv2.imread(plant_image_path)
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        st.image(img_rgb, caption=f"{weather}日的綠色植物祝福 🌿", use_container_width=True)
         plant_message = plant_language_map.get(weather)
         if plant_message:
             st.markdown(
