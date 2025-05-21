@@ -201,7 +201,7 @@ if car_flow is not None:
         "雨天": "🌧️ 竹芋的語言：**療癒、安撫、包容溫柔的心**",
         "陰天": "☁️ 黃金葛的語言：**堅韌、順應環境、不畏逆境**"
     }
-    plant_image_path = plant_image_map.get(weather)
+    plant_image_path = os.path.join("image", os.path.basename(plant_image_map.get(weather)))
     if plant_image_path:
         st.image(plant_image_path, caption=f"{weather}日的綠色植物祝福 🌿", use_container_width=True)
         plant_message = plant_language_map.get(weather)
