@@ -189,6 +189,7 @@ if car_flow is not None:
         st.subheader("🌱 今日綠色生活提醒")
         st.markdown(random.choice(quotes))
 
+    st.write("目前選擇的天氣是：", weather)
     st.subheader("🪴 今日幸運綠色植物")
     plant_image_map = {
         "晴天": "./image/Monstera.png",
