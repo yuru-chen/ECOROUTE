@@ -124,8 +124,8 @@ ax2.set_ylabel("碳排量（kg CO₂）")
 
 st.pyplot(fig)
 
-# 🔎 地圖
-st.subheader("🔎 起點與終點地圖")
+# 地圖
+st.subheader("起點與終點地圖")
 m = folium.Map(location=[25.04, 121.56], zoom_start=13)
 folium.Marker([25.0478, 121.5170], popup="台北車站", icon=folium.Icon(color='blue')).add_to(m)
 folium.Marker([25.0130, 121.5414], popup="臺灣科技大學", icon=folium.Icon(color='green')).add_to(m)
