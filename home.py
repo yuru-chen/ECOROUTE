@@ -5,16 +5,16 @@ import folium
 from streamlit_folium import st_folium
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib import font_manager, rcParams
+from matplotlib import rcParams
 import random
 import cv2
 import numpy as np
 
-# ✅ 改為安全部署用字型設定（DejaVu Sans 為內建，保證存在）
-rcParams['font.family'] = 'DejaVu Sans'
+# ✅ 使用安全字型（部署不會錯）
+rcParams['font.family'] = 'sans-serif'
 rcParams['axes.unicode_minus'] = False
 
-# ✅ 自訂樣式美化
+# ✅ 自訂樣式
 st.markdown(
     """
     <style>
@@ -55,7 +55,7 @@ if not start or not end or not weather:
     st.warning("請完整輸入起點、目的地與天氣狀況。")
     st.stop()
 
-# 路線資料（根據天氣模擬）
+# 模擬資料庫
 if weather == "晴天":
     route_database = {
         ("台北車站", "臺灣科技大學"): {
@@ -86,7 +86,7 @@ if key not in route_database:
     st.warning("🔍 正在查找路線資料，請確認輸入是否正確。")
     st.stop()
 
-# 📊 資料整理
+# 表格整理
 selected_routes = route_database[key]
 df_data = []
 for mode, data in selected_routes.items():
@@ -102,11 +102,10 @@ for mode, data in selected_routes.items():
 df = pd.DataFrame(df_data)
 
 st.subheader("📋 通勤方案比較表（含碳足跡分析）")
-st.markdown("以下為根據距離與國際碳排係數計算的通勤方式分析：")
 st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"]], use_container_width=True)
 
-# 📊 圖表（支援部署字型）
-st.subheader("📊 時間與碳排比較圖")
+# 圖表（修正字型與標籤）
+st.subheader("📊 Time & Carbon Comparison")
 labels = df["交通方式"].tolist()
 carbon_values = df["碳排量（kg CO₂）"].tolist()
 time_values = df["時間（分鐘）"].tolist()
@@ -119,8 +118,8 @@ ax2.plot(x, carbon_values, 'ro-', linewidth=2, markersize=8)
 
 ax1.set_xticks(x)
 ax1.set_xticklabels(labels)
-ax1.set_ylabel("通勤時間（分鐘）")
-ax2.set_ylabel("碳排量（kg CO₂）")
+ax1.set_ylabel("Commute Time (min)")
+ax2.set_ylabel("Carbon Emission (kg CO2)")
 
 st.pyplot(fig)
 
@@ -131,7 +130,7 @@ folium.Marker([25.0478, 121.5170], popup="台北車站", icon=folium.Icon(color=
 folium.Marker([25.0130, 121.5414], popup="臺灣科技大學", icon=folium.Icon(color='green')).add_to(m)
 st_folium(m, width=700, height=450)
 
-# 🚦 即時車流分析
+# 車流分析
 if "car_count" not in st.session_state:
     st.session_state["car_count"] = None
 
@@ -152,7 +151,7 @@ if st.button("📸 啟動車流量分析（高公局 33K+800）"):
     st.session_state["car_count"] = count
     st.success(f"目前偵測約有 {count} 輛車")
 
-# 📌 推薦邏輯與綠色語錄
+# 推薦邏輯
 car_flow = st.session_state.get("car_count", None)
 recommendation = None
 target = None
@@ -193,7 +192,7 @@ if car_flow is not None:
         st.subheader("🌱 今日綠色生活提醒")
         st.markdown(random.choice(quotes))
 
-# 🧠 測驗導引（頁面跳轉卡片）
+# 測驗連結卡片
 st.markdown("""
 <div style='
     background-color: #e0f7e9;
