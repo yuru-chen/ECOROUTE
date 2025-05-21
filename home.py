@@ -207,9 +207,9 @@ if car_flow is not None:
     st.subheader("🪴 今日幸運綠色植物")
 
     plant_image_map = {
-        "晴天": "image/Monstera.png",
-        "雨天": "image/Calathea.png",
-        "陰天": "image/Pothos.png"
+        "晴天": "./image/Monstera.png",
+        "雨天": "./image/Calathea.png",
+        "陰天": "./image/Pothos.png"
     }
 
     plant_language_map = {
