@@ -6,13 +6,21 @@ from streamlit_folium import st_folium
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+import matplotlib.font_manager as fm
 import random
 import cv2
 import numpy as np
+import os
 
-# ✅ 使用安全字型（部署不會錯）
-rcParams['font.family'] = 'sans-serif'
-rcParams['axes.unicode_minus'] = False
+# ✅ 使用自帶字型檔（支援中文）
+font_path = "./fonts/NotoSansTC-Regular.ttf"
+if os.path.exists(font_path):
+    prop = fm.FontProperties(fname=font_path)
+    plt.rcParams['font.family'] = prop.get_name()
+else:
+    rcParams['font.family'] = 'sans-serif'
+    rcParams['axes.unicode_minus'] = False
+    st.warning("⚠️ 找不到中文字型，圖表中文字可能無法顯示")
 
 # ✅ 自訂樣式
 st.markdown(
@@ -104,7 +112,7 @@ df = pd.DataFrame(df_data)
 st.subheader("📋 通勤方案比較表（含碳足跡分析）")
 st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"]], use_container_width=True)
 
-# 圖表（修正字型與標籤）
+# 圖表（保留中文標籤）
 st.subheader("📊 Time & Carbon Comparison")
 labels = df["交通方式"].tolist()
 carbon_values = df["碳排量（kg CO₂）"].tolist()
