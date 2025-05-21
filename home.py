@@ -12,9 +12,9 @@ import cv2
 import numpy as np
 
 # ✅ 全域字型設定（macOS 專用）
-zh_font_path = "/System/Library/Fonts/STHeiti Medium.ttc"
-zh_font = font_manager.FontProperties(fname=zh_font_path)
-plt.rcParams['axes.unicode_minus'] = False
+#zh_font_path = "/System/Library/Fonts/STHeiti Medium.ttc"
+#zh_font = font_manager.FontProperties(fname=zh_font_path)
+#plt.rcParams['axes.unicode_minus'] = False
 
 # ✅ 自訂樣式美化
 st.markdown(
@@ -109,7 +109,30 @@ st.markdown("以下為根據距離與國際碳排係數計算的通勤方式分�
 st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"]], use_container_width=True)
 
 # 📊 圖表（支援中文與 CO₂，同步對齊）
+#st.subheader("📊 時間與碳排比較圖")
+#labels = df["交通方式"].tolist()
+#carbon_values = df["碳排量（kg CO₂）"].tolist()
+#time_values = df["時間（分鐘）"].tolist()
+#x = np.arange(len(labels))
+
+#fig, ax1 = plt.subplots()
+#ax2 = ax1.twinx()
+#ax1.bar(x, time_values, color='skyblue', width=0.4)
+#ax2.plot(x, carbon_values, 'ro-', linewidth=2, markersize=8)
+
+#ax1.set_xticks(x)
+#ax1.set_xticklabels(labels, fontproperties=zh_font)
+#ax1.set_ylabel("通勤時間（分鐘）", fontproperties=zh_font)
+#ax2.set_ylabel("碳排量（kg CO₂）", fontproperties=zh_font)
+
+#st.pyplot(fig)
+# 📊 圖表（支援中文與 CO₂，同步對齊）
 st.subheader("📊 時間與碳排比較圖")
+
+# ✅ 改為通用字型（不指定路徑）
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['axes.unicode_minus'] = False
+
 labels = df["交通方式"].tolist()
 carbon_values = df["碳排量（kg CO₂）"].tolist()
 time_values = df["時間（分鐘）"].tolist()
@@ -121,11 +144,12 @@ ax1.bar(x, time_values, color='skyblue', width=0.4)
 ax2.plot(x, carbon_values, 'ro-', linewidth=2, markersize=8)
 
 ax1.set_xticks(x)
-ax1.set_xticklabels(labels, fontproperties=zh_font)
-ax1.set_ylabel("通勤時間（分鐘）", fontproperties=zh_font)
-ax2.set_ylabel("碳排量（kg CO₂）", fontproperties=zh_font)
+ax1.set_xticklabels(labels)  # ❌ 不使用 fontproperties
+ax1.set_ylabel("通勤時間（分鐘）")
+ax2.set_ylabel("碳排量（kg CO₂）")
 
 st.pyplot(fig)
+
 
 # 🗺️ 地圖
 st.subheader("🗺️ 起點與終點地圖")
