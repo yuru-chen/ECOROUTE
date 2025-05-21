@@ -23,12 +23,9 @@ else:
     rcParams['font.family'] = 'sans-serif'
 
 # ✅ 自訂樣式
-st.markdown(
-    """
+st.markdown("""
     <style>
-    body {
-        background-color: #f4f7f9;
-    }
+    body { background-color: #f4f7f9; }
     .stButton>button {
         background-color: #4CAF50;
         color: white;
@@ -36,21 +33,14 @@ st.markdown(
         border-radius: 8px;
         padding: 0.4em 1em;
     }
-    .stButton>button:hover {
-        background-color: #45a049;
-    }
-    .stDataFrame {
-        border-radius: 10px;
-        border: 1px solid #ddd;
-    }
+    .stButton>button:hover { background-color: #45a049; }
+    .stDataFrame { border-radius: 10px; border: 1px solid #ddd; }
     .stAlert {
         border-left: 5px solid #4CAF50;
         background-color: #e7f4ec;
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
 st.title("🌍 EcoRoute：AI永續路線小幫手")
 st.subheader("讓你每天少走冤枉路，也少排二氧化碳")
@@ -67,25 +57,25 @@ if not start or not end or not weather:
 if weather == "晴天":
     route_database = {
         ("台北車站", "臺灣科技大學"): {
-            "捷運": {"時間": 25, "距離": 4.0, "碳排": 0.033, "說明": "紅線至中正紀念堂轉綠線至公館，步行至台科大"},
-            "公車": {"時間": 30, "距離": 4.5, "碳排": 0.1, "說明": "搭羅斯福路幹線至公館站，步行 5 分鐘抵達"},
-            "開車": {"時間": 18, "距離": 5.8, "碳排": 0.21, "說明": "經市民大道、中山南路、公館圓環至台科大"},
+            "捷運": {"時間": 25, "距離": 4.0, "碳排": 0.033},
+            "公車": {"時間": 30, "距離": 4.5, "碳排": 0.1},
+            "開車": {"時間": 18, "距離": 5.8, "碳排": 0.21}
         }
     }
 elif weather == "陰天":
     route_database = {
         ("台北車站", "臺灣科技大學"): {
-            "捷運": {"時間": 27, "距離": 4.0, "碳排": 0.033, "說明": "紅線至中正紀念堂轉綠線至公館"},
-            "公車": {"時間": 34, "距離": 4.5, "碳排": 0.105, "說明": "搭羅斯福路幹線至公館站"},
-            "開車": {"時間": 22, "距離": 5.8, "碳排": 0.21, "說明": "經市民大道至台科大"},
+            "捷運": {"時間": 27, "距離": 4.0, "碳排": 0.033},
+            "公車": {"時間": 34, "距離": 4.5, "碳排": 0.105},
+            "開車": {"時間": 22, "距離": 5.8, "碳排": 0.21}
         }
     }
 else:
     route_database = {
         ("台北車站", "臺灣科技大學"): {
-            "捷運": {"時間": 30, "距離": 4.0, "碳排": 0.033, "說明": "轉乘紅線與綠線後步行"},
-            "公車": {"時間": 40, "距離": 4.5, "碳排": 0.12, "說明": "羅斯福路幹線到公館"},
-            "開車": {"時間": 28, "距離": 5.8, "碳排": 0.25, "說明": "自駕路線經中山南路與基隆路"},
+            "捷運": {"時間": 30, "距離": 4.0, "碳排": 0.033},
+            "公車": {"時間": 40, "距離": 4.5, "碳排": 0.12},
+            "開車": {"時間": 28, "距離": 5.8, "碳排": 0.25}
         }
     }
 
@@ -94,7 +84,6 @@ if key not in route_database:
     st.warning("🔍 正在查找路線資料，請確認輸入是否正確。")
     st.stop()
 
-# 表格整理
 selected_routes = route_database[key]
 df_data = []
 for mode, data in selected_routes.items():
@@ -104,13 +93,12 @@ for mode, data in selected_routes.items():
         "時間（分鐘）": data["時間"],
         "距離（公里）": int(data["距離"]),
         "碳排係數（kg CO₂/km）": data["碳排"],
-        "碳排量（kg CO₂）": 碳排量,
-        "說明": data["說明"]
+        "碳排量（kg CO₂）": 碳排量
     })
 df = pd.DataFrame(df_data)
 
 st.subheader("📋 通勤方案比較表（含碳足跡分析）")
-st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"]], use_container_width=True)
+st.dataframe(df["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"], use_container_width=True)
 
 # 圖表
 st.subheader("📊 Time & Carbon Comparison")
@@ -138,9 +126,6 @@ folium.Marker([25.0478, 121.5170], popup="台北車站", icon=folium.Icon(color=
 folium.Marker([25.0130, 121.5414], popup="臺灣科技大學", icon=folium.Icon(color='green')).add_to(m)
 st_folium(m, width=700, height=450)
 
-# ✅ 插入縮減空白的間距控制
-st.markdown("<div style='margin-top: -30px;'></div>", unsafe_allow_html=True)
-
 # 車流分析
 if "car_count" not in st.session_state:
     st.session_state["car_count"] = None
@@ -162,7 +147,6 @@ if st.button("📸 啟動車流量分析（高公局 33K+800）"):
     st.session_state["car_count"] = count
     st.success(f"目前偵測約有 {count} 輛車")
 
-# 推薦邏輯
 car_flow = st.session_state.get("car_count", None)
 recommendation = None
 target = None
@@ -174,13 +158,15 @@ if car_flow is not None:
             recommendation = "🚇 建議搭乘捷運避開壅塞與雨天不便"
             target = "捷運"
         else:
-            target = df[df["交通方式"].isin(["捷運", "公車"])].sort_values(by="碳排量（kg CO₂）").iloc[0]["交通方式"]
+            target = df[df["交通方式"].isin(["捷運", "公車"])] \
+                .sort_values(by="碳排量（kg CO₂）").iloc[0]["交通方式"]
             recommendation = f"🚌 車流順暢，雨天建議使用低碳選項：**{target}**"
     elif car_flow > 10:
         target = df.sort_values(by=["時間（分鐘）", "碳排量（kg CO₂）"]).iloc[0]["交通方式"]
         recommendation = f"🚇 車多易塞，建議選擇快速且低碳的通勤方式：**{target}**"
     else:
-        target = df[df["交通方式"].isin(["公車", "開車"])].sort_values(by="碳排量（kg CO₂）").iloc[0]["交通方式"]
+        target = df[df["交通方式"].isin(["公車", "開車"])] \
+            .sort_values(by="碳排量（kg CO₂）").iloc[0]["交通方式"]
         recommendation = f"🚗 車流順暢，推薦通勤方式：**{target}**（兼顧效率與碳排）"
 
     st.success(recommendation)
@@ -196,38 +182,34 @@ if car_flow is not None:
         ("雨天", "公車"): ["🚌 一起擠上車的時候，也是一種暖和的選擇。"],
         ("陰天", "捷運"): ["🚇 陰天讓人想躲進地下，但心裡依舊明亮。"],
         ("陰天", "公車"): ["🚌 坐在窗邊，讓城市慢慢往後滑走。"],
-        ("陰天", "開車"): ["🚗 車窗起霧時，也別忘了我們在選擇更永續的方向。"],
+        ("陰天", "開車"): ["🚗 車窗起霧時，也別忘了我們在選擇更永續的方向。"]
     }
     quotes = green_quotes_by_context.get((weather, target), [])
     if quotes:
         st.subheader("🌱 今日綠色生活提醒")
         st.markdown(random.choice(quotes))
 
-    # ✅ 幸運植物 + 植物語
     st.subheader("🪴 今日幸運綠色植物")
-
     plant_image_map = {
         "晴天": "./image/Monstera.png",
         "雨天": "./image/Calathea.png",
         "陰天": "./image/Pothos.png"
     }
-
     plant_language_map = {
         "晴天": "🌿 龜背芋的語言：**堅毅、獨立、自信成長**",
         "雨天": "🌧️ 竹芋的語言：**療癒、安撫、包容溫柔的心**",
         "陰天": "☁️ 黃金葛的語言：**堅韌、順應環境、不畏逆境**"
     }
-
     plant_image_path = plant_image_map.get(weather)
     if plant_image_path:
-        st.image(plant_image_path, caption=f"{weather}日的綠色植物祝福 🌿", use_column_width=True)
+        st.image(plant_image_path, caption=f"{weather}日的綠色植物祝福 🌿", use_container_width=True)
         plant_message = plant_language_map.get(weather)
         if plant_message:
             st.markdown(f"<div style='text-align:center; font-size:18px; color:#2e7d32; margin-top:10px;'>{plant_message}</div>", unsafe_allow_html=True)
     else:
         st.info("🌱 今天的綠色植物資料尚未準備完成")
 
-# 測驗連結卡片
+# 測驗卡片
 st.markdown("""
 <div style='
     background-color: #e0f7e9;
