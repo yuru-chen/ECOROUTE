@@ -125,11 +125,10 @@ m = folium.Map(location=[25.04, 121.56], zoom_start=13)
 folium.Marker([25.0478, 121.5170], popup="台北車站", icon=folium.Icon(color='blue')).add_to(m)
 folium.Marker([25.0130, 121.5414], popup="臺灣科技大學", icon=folium.Icon(color='green')).add_to(m)
 st_folium(m, width=700, height=450)
-st.markdown("<div style='margin-top:-40px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top:-60px;'></div>", unsafe_allow_html=True)
 # 車流分析
 if "car_count" not in st.session_state:
     st.session_state["car_count"] = None
-
 st.subheader("🚦 即時交通影像分析")
 if st.button("📸 啟動車流量分析（高公局 33K+800）"):
     cap = cv2.VideoCapture("https://cctvn.freeway.gov.tw/abs2mjpg/bmjpg?camera=13380")
