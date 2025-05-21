@@ -98,7 +98,7 @@ for mode, data in selected_routes.items():
 df = pd.DataFrame(df_data)
 
 st.subheader("📋 通勤方案比較表（含碳足跡分析）")
-st.dataframe(df["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"], use_container_width=True)
+st.dataframe(df[["交通方式", "時間（分鐘）", "距離（公里）", "碳排係數（kg CO₂/km）", "碳排量（kg CO₂）"]], use_container_width=True)
 
 # 圖表
 st.subheader("📊 Time & Carbon Comparison")
@@ -191,26 +191,28 @@ if car_flow is not None:
 
     st.write("目前選擇的天氣是：", weather)
     st.subheader("🪴 今日幸運綠色植物")
+
+    # ✅ 本地圖片路徑版本
     plant_image_map = {
-        "晴天": "./image/Monstera.png",
-        "雨天": "./image/Calathea.png",
-        "陰天": "./image/Pothos.png"
+        "晴天": "image/Monstera.png",
+        "雨天": "image/Calathea.png",
+        "陰天": "image/Pothos.png"
     }
     plant_language_map = {
         "晴天": "🌿 龜背芋的語言：**堅毅、獨立、自信成長**",
         "雨天": "🌧️ 竹芋的語言：**療癒、安撫、包容溫柔的心**",
         "陰天": "☁️ 黃金葛的語言：**堅韌、順應環境、不畏逆境**"
     }
-    plant_image_path = os.path.join("image", os.path.basename(plant_image_map.get(weather)))
-    if plant_image_path:
+    plant_image_path = plant_image_map.get(weather)
+    if plant_image_path and os.path.exists(plant_image_path):
         st.image(plant_image_path, caption=f"{weather}日的綠色植物祝福 🌿", use_container_width=True)
         plant_message = plant_language_map.get(weather)
         if plant_message:
             st.markdown(f"<div style='text-align:center; font-size:18px; color:#2e7d32; margin-top:10px;'>{plant_message}</div>", unsafe_allow_html=True)
     else:
-        st.info("🌱 今天的綠色植物資料尚未準備完成")
+        st.warning(f"⚠️ 無法載入圖片：{plant_image_path}，請確認圖片已存在於 image 資料夾，並已成功 push 至 GitHub。")
 
-# 測驗卡片
+# 測驗卡片連結
 st.markdown("""
 <div style='
     background-color: #e0f7e9;
