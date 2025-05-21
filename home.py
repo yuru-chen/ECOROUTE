@@ -11,9 +11,7 @@ import cv2
 import numpy as np
 
 # ✅ 改為安全部署用字型設定（DejaVu Sans 為內建，保證存在）
-rcParams['font.family'] = font_manager.FontProperties(
-    fname=font_manager.findfont("DejaVu Sans")
-).get_name()
+rcParams['font.family'] = 'DejaVu Sans'
 rcParams['axes.unicode_minus'] = False
 
 # ✅ 自訂樣式美化
